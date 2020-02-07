@@ -22,7 +22,9 @@ trait HasAbilities
     public static function bootHasAbilities()
     {
         static::deleted(function ($model) {
-            $model->abilities()->detach();
+            if (!method_exists($model, 'isForceDeleting') || $model->isForceDeleting()) {
+                $model->abilities()->detach();
+            }
         });
     }
 
